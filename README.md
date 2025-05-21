@@ -22,5 +22,7 @@ If you find this repository useful in your research, please consider citing the 
   author={Zou, Mian and Yu, Baosheng and Zhan, Yibing and Lyu, Siwei and Ma, Kede},
   journal={IEEE Transactions on Information Forensics and Security},
   year={2025},
+  pages={4512-4524},
+  vol={20}
 }
 ```
