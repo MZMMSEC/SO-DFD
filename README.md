@@ -1,4 +1,4 @@
-# [TIFS'25] Semantic Contextualization of Face Forgery: A New Definition, Dataset, and Detection Method
+# [TIFS'25] Semantic Contextualization of Face Forgery: A New Definition, Dataset, and Detection Method (SO-DFD)
 
 This repository contains the official PyTorch implementation of the paper **"[Semantic Contextualization of Face Forgery: A New Definition, Dataset, and Detection Method](https://ieeexplore.ieee.org/document/10948473)"** by Mian Zou, Baosheng Yu, Yibing Zhan, Siwei Lyu, and Kede Ma.
 
