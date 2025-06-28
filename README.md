@@ -8,8 +8,8 @@ This repository contains the official PyTorch implementation of the paper **"[Se
 We are working hard on the following items.
 
 - [x] Release [arXiv paper](https://arxiv.org/abs/2405.08487)
-- [ ] Release training codes
-- [ ] Release inference codes
+- [x] Release training codes
+- [x] Release inference codes
 - [ ] Release checkpoints 
 - [ ] Release datasets
 
