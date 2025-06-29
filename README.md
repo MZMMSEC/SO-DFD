@@ -17,11 +17,88 @@ We are working hard on the following items.
 ### 1.Download FFSC Dataset
 | Dataset |                                                 Link                                                 |
 |:-------------------------------------------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------:|
-|FFSC| [Baidu Disk]() |
+|FFSC| [Baidu Disk](https://pan.baidu.com/s/15RHA9Dvek50WoM9patkw1Q?pwd=v2v3)|
 
 #### 🔈 Privacy Statement
 
 This dataset is released under the [Terms to Use FFSC]() and for academic and research purposes only, which is provided "as it is" and we are not responsible for any subsequence from using this dataset. All original videos of the FFSC dataset are obtained from the Internet which are not property of the authors or the authors’ affiliated institutions. Neither the authors or the authors’ affiliated institution are responsible for the content nor the meaning of these videos. If you feel uncomfortable about your identity shown in this dataset, please contact us and we will remove corresponding information from the dataset.
+
+#### Dataset Structure
+```
+FFSC
+├── Train
+│   ├──BlendFace
+│   │   ├──_-926WzaH2A_215_0037_by_pNqmJjTr2PA_107_0069.png
+│   │   ├──...
+│   ├──diffae-age
+│   │   ├──_-926WzaH2A_215
+│   │   │   ├──0037.png
+│   │   │   ├──...
+│   ├──diffae-gender
+│   │   ├──Male
+│   │   │   ├──_-926WzaH2A_215_0037_Male_-0.2.png
+│   │   │   ├──...
+│   ├──fomm-expr
+│   │   ├──_-926WzaH2A_215_0037_surprised.png
+│   │   ├──...
+│   ├──fomm-pose
+│   │   ├──_-926WzaH2A_215_0037_pose_fr100.png
+│   │   ├──...
+│   ├──fsgan
+│   │   ├──0H007ZkBJSs_168.766667_176.933333
+│   │   │   ├──0011.png
+│   │   │   ├──...
+│   ├──Real
+│   │   ├──CDF-youtube
+│   │   │   ├──00000
+│   │   │   │   ├──0078.png
+│   │   │   │   ├──...
+│   │   ├──AVSpeech
+│   │   │   ├──_-926WzaH2A_215
+│   │   │   │   ├──0037.png
+│   │   │   │   ├──...
+│   ├──simswap
+│   │   ├──_-926WzaH2A_215_2_pNqmJjTr2PA_107
+│   │   │   ├──0007.png
+│   │   │   ├──...
+│   ├──StyleGAN2_dis-gender
+│   │   ├──_-926WzaH2A_215_0037_gender.png
+│   │   ├──...
+│   ├──StyleRes-age
+│   │   ├──_-926WzaH2A_215
+│   │   │   ├──0037.png
+│   │   │   ├──...
+│   ├──StyleRes-expr
+│   │   ├──_-926WzaH2A_215
+│   │   │   ├──0037.png
+│   │   │   ├──...
+│   ├──TPS-pose
+│   │   ├──pose
+│   │   │   ├──_-926WzaH2A_215_0037_pose_fr100.png
+│   │   │   ├──...
+├── Val
+├── Test
+│   ├──Real
+│   ├──Protocol-1
+│   │   ├──FNeVR
+│   │   │   ├──_wKUEOeAnFI_60_0018_pose_fr15.png
+│   │   │   ├──...
+│   │   ├──HFGI-age
+│   │   │   ├──_wKUEOeAnFI_60
+│   │   │   │   ├──0018.png
+│   │   │   │   ├──...
+│   │   ├──HFGI-smile
+│   │   │   ├──_wKUEOeAnFI_60
+│   │   │   │   ├──0018.png
+│   │   │   │   ├──...
+│   │   ├──InfoSwap
+│   │   │   ├──_wKUEOeAnFI_60_To_00168
+│   │   │   │   ├──0165_gen.png
+│   │   │   │   ├──...
+│   │   ├──StyleCLIP-gender
+│   │   │   ├──_wKUEOeAnFI_60_0018.png
+│   │   │   ├──...
+```
 
 ### 2.Download Other Datasets
 Follow the links below to download the datasets (🛡️ Copyright of the datasets belongs to their original providers, and you may be asked to fill out some forms before downloading):
@@ -65,6 +142,16 @@ CUDA_VISIBLE_DEVICES=4 python SO_xception.py --eval --name SO_Xcp --output ./out
 --num_out 12 --mode_label all_local \
 --dataset CDF --datapath [dataset path, e.g., /data/CDF/faces/] --n_frames 32 \
 --resume [checkpoints path, e.g., ./pretrained/ckpt_SO_Xcp_FFSC.pth]
+```
+
+**Protocol-1 Test**
+```
+
+```
+
+**Protocol-2 Test**
+```
+
 ```
 
 ## Citation
