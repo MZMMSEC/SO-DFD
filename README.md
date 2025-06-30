@@ -11,7 +11,7 @@ We are working hard on the following items.
 - [x] Release training codes
 - [x] Release inference codes
 - [x] Release checkpoints 
-- [ ] Release datasets
+- [x] Release datasets
 
 ## 📁 Datasets
 ### 1.Download FFSC Dataset
