@@ -146,7 +146,10 @@ CUDA_VISIBLE_DEVICES=4 python SO_xception.py --eval --name SO_Xcp --output ./out
 
 **Protocol-1 Test**
 ```
-
+CUDA_VISIBLE_DEVICES=4 python SO_xception.py --eval --name SO_Xcp --output ./output/test/protocol-1/[name of the semantic attribute, e.g., age, etc.] \
+--num_out 12 --mode_label all_local \
+--dataset ffsc --ffsc_path [ffsc_subset_path for the attribute] \
+--resume [checkpoints path, e.g., ./pretrained/protocol-1/ckpt_SO_Xcp_FFSC_P1.pth]
 ```
 
 **Protocol-2 Test**
