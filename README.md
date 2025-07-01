@@ -134,6 +134,9 @@ Follow the links below to download the datasets (🛡️ Copyright of the datase
 After downloading these checkpoints, put them into the folder ``pretrained``.
 
 ### 3. Training 
+```
+
+```
 
 ### 4. Inference on the test sets
 **Cross-dataset Test**
@@ -154,7 +157,10 @@ CUDA_VISIBLE_DEVICES=4 python SO_xception.py --eval --name SO_Xcp --output ./out
 
 **Protocol-2 Test**
 ```
-
+CUDA_VISIBLE_DEVICES=4 python SO_xception.py --eval --name SO_Xcp --output ./output/test/protocol-2/[name of the semantic attribute, e.g., age, etc.] \
+--num_out 12 --mode_label all_local \
+--dataset ffsc --ffsc_path [ffsc_subset_path for the attribute] \
+--resume [checkpoints path, e.g., ./pretrained/protocol-2/ckpt_SO_Xcp_FFSC_P2_age.pth]
 ```
 
 ## Citation
