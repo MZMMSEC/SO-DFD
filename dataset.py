@@ -48,7 +48,8 @@ def set_dataset_FFSC_SLH(txt_path, preprocess, args, logger, phase='train', aug=
         return dataset, data_loader_val
 
 class FFSC_dataset_SLH(Dataset):
-    def __init__(self, txt_path, preprocess, mode_label='global', aug_probs=0.3, is_SLH=True, is_nWay=False,
+    def __init__(self, txt_path, preprocess, mode_label='global',
+                 aug_probs=0.3, is_SLH=True, is_nWay=False,
                  address_fn=False):
         super().__init__()
         fh = open(txt_path, 'r')
@@ -380,7 +381,7 @@ class BuildDeeperDataset_online(Dataset):
 
         self.n_frames = n_frames
         self.datapath_manip = os.path.join(datapath, 'faces', mode)
-        self.datapath_real = os.path.join('data/FF++/', 'original_sequences/youtube', 'c23', 'faces')
+        self.datapath_real = os.path.join('/data0/mian2/FF++/', 'original_sequences/youtube', 'c23', 'faces')
         self.transform = preprocess
 
         self.vid_file_path = []
@@ -587,7 +588,8 @@ def set_dataset_singleGPU_FSh(preprocess, datapath = '/data/FSh', n_frames=32, m
     return dataset, data_loader_val
 
 class MyDataset_FFSC(torch.utils.data.Dataset):
-    def __init__(self, txt_path, transform=None, target_transform=None, perturb='None', output_addr=False):
+    def __init__(self, txt_path, transform=None, target_transform=None,
+                 aug_probs=1.0, output_addr=False):
         fh = open(txt_path, 'r')
         imgs = []
         for line in fh:
@@ -602,16 +604,16 @@ class MyDataset_FFSC(torch.utils.data.Dataset):
         self.imgs = imgs
         self.transform = transform
         self.target_transform = target_transform
-        self.perturb = perturb
         self.output_addr = output_addr
+        self.aug_probs = aug_probs
 
-        print(f'perturbation is {perturb}...')
-        print(f"successfully build FFSC perturbation test dataset")
 
     def __getitem__(self, index):
         fn, label = self.imgs[index]
         img = Image.open(fn).convert('RGB')
-        # img = self.perturbation(img, self.perturb)
+        if random.random() < self.aug_probs:
+            img = self.perturbation_jpeg(img)
+
 
         if self.transform is not None:
             img = self.transform(img)
@@ -623,6 +625,64 @@ class MyDataset_FFSC(torch.utils.data.Dataset):
 
     def __len__(self):
         return len(self.imgs)
+
+    def perturbation_jpeg(self, im):
+        distortion = ['BW', 'GNC', 'GB', 'JPEG', 'RealJPEG']
+        type = random.choice(distortion)
+        # if random.random() < 0.6:
+        #     level = random.randint(1,2)
+        # else:
+        #     level = 3
+        if random.random() < 0.5:
+            level = 1
+        else:
+            level = 2
+
+        if type != 'RealJPEG':
+            im = np.asarray(im)
+            im = np.copy(im)
+            im = np.flip(im, 2)
+
+            dist_function, dist_param = self.get_perturb(type, level)
+            im = dist_function(im, dist_param)
+            im = Image.fromarray(np.flip(im, 2))
+
+            return im
+        else: # REAL JPEG
+            im = cv2.cvtColor(np.array(im), cv2.COLOR_RGBA2BGRA)  # PIL转cv2
+            # pdb.set_trace()
+            # # quality = random.randint(75, 100)
+            # quality = random.choice([75, 80, 90])
+            quality = random.choice([70, 80, 90])
+            encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), quality]
+            face_img_encode = cv2.imencode('.jpg', im, encode_param)[1]
+            im = cv2.imdecode(face_img_encode, cv2.IMREAD_COLOR)
+            im = Image.fromarray(cv2.cvtColor(im, cv2.COLOR_BGR2RGB))
+            return im
+
+    def get_perturb(self, type, level):
+        def get_distortion_function(type):
+            func_dict = dict()  # a dict of function
+            func_dict['BW'] = block_wise
+            func_dict['GNC'] = gaussian_noise_color
+            func_dict['GB'] = gaussian_blur
+            func_dict['JPEG'] = pixelation
+
+            return func_dict[type]
+
+        def get_distortion_parameter(type, level):
+            param_dict = dict()  # a dict of list
+            param_dict['BW'] = [16, 32, 48]  # larger, worse
+            param_dict['GNC'] = [0.001, 0.002, 0.005]  # larger, worse
+            param_dict['GB'] = [7, 9, 13]  # larger, worse
+            param_dict['JPEG'] = [2, 3, 4]  # larger, worse
+            # level starts from 1, list starts from 0
+            return param_dict[type][level - 1]
+
+        level = int(level)
+        dist_function = get_distortion_function(type)
+        dist_param = get_distortion_parameter(type, level)
+        return dist_function, dist_param
 
 # ------------------------------------------------------------------------------------------------------------------- #
 # for Celeb-DF dataset
