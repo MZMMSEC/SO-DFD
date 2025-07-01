@@ -108,6 +108,8 @@ def test(args):
 
     elif args.dataset == 'ffsc':
         txt_ffsc_path = '/data/FFSC/' + args.ffsc_path + '.txt'  # "/data0/mian2/vision-language/FFSC-test.txt"
+        if not os.path.isfile(txt_ffsc_path):
+            txt_ffsc_path = args.ffsc_path
         ffsc_val = MyDataset_FFSC(txt_ffsc_path, transforms)
         data_loader_ffsc = torch.utils.data.DataLoader(ffsc_val, batch_size=64, shuffle=False,
                                                        pin_memory=True, num_workers=4)
