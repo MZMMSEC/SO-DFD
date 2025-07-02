@@ -129,7 +129,6 @@ Follow the links below to download the datasets (🛡️ Copyright of the datase
 |:----------------:|:----------------:|:-------------------------------------------------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------------------------------------:|
 | SO-Xception | FFSC  | [Google Drive](https://drive.google.com/drive/folders/18OeNMi_J8XvbWklKBm8EtMzJ0YgOVyOD?usp=sharing) |✅|
 | SO-ViT-B | FFSC  | [Google Drive]() |⬜|
-| SO-ViT-B | FF++  | [Google Drive]() |⬜|
 
 After downloading these checkpoints, put them into the folder ``pretrained``.
 
@@ -142,6 +141,16 @@ CUDA_VISIBLE_DEVICES=4 python SO_xception.py --seed 0 --name SO_Xcp --output ./o
 --num_out 12 --BATCH_SIZE 32 --NUM_WORKERS 8 --mode_label all_local --is_SLH \
 --aug --aug_probs 0.3 \
 --optim adam --scheduler step --lr 1e-4 \
+--txt_path_train [path file for training, e.g., /data/train_SLH_v2_update.txt] \
+--txt_path_val [path file for val, e.g., /data/val_SLH_v2_update.txt]
+```
+```
+CUDA_VISIBLE_DEVICES=7 python SO_ViT.py --seed 0 --name SO_ViT-B --output ./output/train/cross-dataset/ \
+--gpu 0 --task binary --weight autol --autol_lr 1e-4 --autol_init 1.0 \
+--epochs 36 \
+--num_out 12 --BATCH_SIZE 32 --NUM_WORKERS 8 --mode_label all_local --is_SLH \
+--aug --aug_probs 0.3 \
+--optim adam --scheduler step --lr 1e-6 \
 --txt_path_train [path file for training, e.g., /data/train_SLH_v2_update.txt] \
 --txt_path_val [path file for val, e.g., /data/val_SLH_v2_update.txt]
 ```
@@ -165,6 +174,12 @@ CUDA_VISIBLE_DEVICES=4 python SO_xception.py --eval --name SO_Xcp --output ./out
 --num_out 12 --mode_label all_local \
 --dataset CDF --datapath [dataset path, e.g., /data/CDF/faces/] --n_frames 32 \
 --resume [checkpoints path, e.g., ./pretrained/ckpt_SO_Xcp_FFSC.pth]
+```
+```
+CUDA_VISIBLE_DEVICES=4 python SO_ViT.py --eval --name SO_ViT-B --output ./output/test/Deeper \
+--num_out 12 --mode_label all_local \
+--dataset Deeper --datapath [dataset path, e.g., /data/DF-1.0/] --n_frames 32 \
+--resume [checkpoints path, e.g., ./pretrained/ckpt_SO_ViTB_FFSC.pth]
 ```
 
 **Protocol-1 Test**
