@@ -5,7 +5,7 @@ import torch.optim as optim
 from torch.optim import lr_scheduler
 from torch.utils.tensorboard import SummaryWriter
 from timm.utils import AverageMeter
-from sklearn.metrics import roc_auc_score
+from sklearn.metrics import roc_auc_score, accuracy_score
 from tqdm import tqdm
 
 from logger import create_logger
@@ -60,6 +60,7 @@ def parse_option():
     parser.add_argument('--n_frames', type=int, default=32)
     parser.add_argument('--dataset', type=str, default='CDF', help='FSh, Deeper')
     parser.add_argument('--ffsc_path', default="test", type=str)
+    parser.add_argument('--datapath', type=str, default='/data/CDF/faces/')
 
     args, unparsed = parser.parse_known_args()
     config = get_config(args)
@@ -78,7 +79,7 @@ def test(args):
     if args.resume:
         max_accuracy = load_checkpoint(args, model_without_ddp, logger)
 
-    transforms = xception_default_data_transforms
+    transforms = xception_default_data_transforms['val']
 
     logger.info(f'eval dataset {args.dataset}......')
     if args.dataset == 'DFDC':
@@ -88,14 +89,14 @@ def test(args):
 
     elif args.dataset == 'Deeper':
         _, data_loader_dp = set_dataset_singleGPU_Deeper(preprocess=transforms,
-                                                         datapath='/data/DF-1.0/',#'/data0/mian2/DeeperForensics/',
+                                                         datapath=args.datapath,#'/data/DF-1.0/',#'/data0/mian2/DeeperForensics/',
                                                          n_frames=args.n_frames)
         auc = test_gen(data_loader_dp, model, criterion)
         logger.info(f' * AUC {auc: .4f}')
 
     elif args.dataset == 'CDF':
         _, data_loader_CDF = set_dataset_singleGPU_CDF(preprocess=transforms,
-                                                       datapath='/data/CDF/faces/',#'/data0/mian2/celeb-df/dataset/',
+                                                       datapath=args.datapath,#'/data0/mian2/celeb-df/dataset/',
                                                        n_frames=args.n_frames)
         auc = test_gen(data_loader_CDF, model, criterion)
         logger.info(f' * AUC {auc: .4f}')
@@ -110,12 +111,12 @@ def test(args):
         txt_ffsc_path = '/data/FFSC/' + args.ffsc_path + '.txt'  # "/data0/mian2/vision-language/FFSC-test.txt"
         if not os.path.isfile(txt_ffsc_path):
             txt_ffsc_path = args.ffsc_path
-        ffsc_val = MyDataset_FFSC(txt_ffsc_path, transforms)
+        ffsc_val = MyDataset_FFSC(txt_ffsc_path, transforms, args.aug_probs)
         data_loader_ffsc = torch.utils.data.DataLoader(ffsc_val, batch_size=64, shuffle=False,
                                                        pin_memory=True, num_workers=4)
 
-        auc = test_gen_imgs(data_loader_ffsc, model, criterion)
-        logger.info(f' * AUC {auc: .4f}')
+        auc, acc = test_gen_imgs(data_loader_ffsc, model, criterion)
+        logger.info(f' * Acc {acc: .4f} * AUC {auc: .4f} ')
 
 
 @torch.no_grad()
@@ -145,6 +146,7 @@ def test_gen(data_loader, model, criterion):
 def test_gen_imgs(data_loader, model, criterion):
     model.eval()
 
+    video_predict_binary = []
     # for auc
     video_predict = []
     video_label = []
@@ -156,13 +158,18 @@ def test_gen_imgs(data_loader, model, criterion):
         preds = model(samples)
         probs = criterion.infer(preds)[:, 0] #torch.sigmoid(preds[:, 0])
 
+        video_predict_binary.extend(
+            (np.array(probs.detach().cpu()) >= 0.5).astype(int).tolist()
+        )
+
         probs_auc = probs
         frames_predict = probs_auc.detach().cpu().numpy().tolist()
         video_predict.extend(frames_predict)
         video_label.extend(targets.detach().cpu().numpy().tolist())
 
     auc = roc_auc_score(video_label, video_predict) * 100
-    return auc
+    acc = accuracy_score(video_label, video_predict_binary) * 100
+    return auc, acc
 
 
 
@@ -469,4 +476,7 @@ if __name__ == '__main__':
         os.makedirs(output_path)
     logger = create_logger(output_dir=output_path, name=f"{args.name}")
 
-    train(args)
+    if not args.eval:
+        train(args)
+    else:
+        test(args)
