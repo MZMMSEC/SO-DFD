@@ -128,7 +128,7 @@ Follow the links below to download the datasets (🛡️ Copyright of the datase
 |      Model       |    Training Dataset   |                                                        Download                                                                | |
 |:----------------:|:----------------:|:-------------------------------------------------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------------------------------------:|
 | SO-Xception | FFSC  | [Google Drive](https://drive.google.com/drive/folders/18OeNMi_J8XvbWklKBm8EtMzJ0YgOVyOD?usp=sharing) |✅|
-| SO-ViT-B | FFSC  | [Google Drive]() |⬜|
+| SO-ViT-B | FFSC  | [Google Drive](https://drive.google.com/file/d/1WIfelevjJfxNUVqPfT_Ga8_LwhblaNam/view?usp=sharing) |✅|
 
 After downloading these checkpoints, put them into the folder ``pretrained``.
 
