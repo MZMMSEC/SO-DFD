@@ -21,7 +21,7 @@ We are working hard on the following items.
 
 #### 🔈 Privacy Statement
 
-This dataset is released under the [Terms to Use FFSC]() and for academic and research purposes only, which is provided "as it is" and we are not responsible for any subsequence from using this dataset. All original videos of the FFSC dataset are obtained from the Internet which are not property of the authors or the authors’ affiliated institutions. Neither the authors or the authors’ affiliated institution are responsible for the content nor the meaning of these videos. If you feel uncomfortable about your identity shown in this dataset, please contact us and we will remove corresponding information from the dataset.
+This dataset is released for academic and research purposes only, which is provided "as it is" and we are not responsible for any subsequence from using this dataset. All original videos of the FFSC dataset are obtained from the Internet which are not property of the authors or the authors’ affiliated institutions. Neither the authors or the authors’ affiliated institution are responsible for the content nor the meaning of these videos. If you feel uncomfortable about your identity shown in this dataset, please contact us and we will remove corresponding information from the dataset.
 
 #### Dataset Structure
 ```
