@@ -136,19 +136,26 @@ After downloading these checkpoints, put them into the folder ``pretrained``.
 ### 3. Training 
 **Cross-dataset/Protocol-1 Test**
 ```
-CUDA_VISIBLE_DEVICES=4 python SO_xception.py --seed 0 --name SO_Xcp --output ./output/train/cross-dataset/ \
+CUDA_VISIBLE_DEVICES=4 python SO_xception.py --seed 0 --name SO_Xcp --output ./output/train/[e.g., cross-dataset, protocol-1]/ \
 --gpu 0 --task binary --weight autol --autol_lr 1e-3 --autol_init 1.0 \
 --epochs 36 \
 --num_out 12 --BATCH_SIZE 32 --NUM_WORKERS 8 --mode_label all_local --is_SLH \
 --aug --aug_probs 0.3 \
 --optim adam --scheduler step --lr 1e-4 \
 --txt_path_train [path file for training, e.g., /data/train_SLH_v2_update.txt] \
---txt_path_val [path file for training, e.g., /data/val_SLH_v2_update.txt]
+--txt_path_val [path file for val, e.g., /data/val_SLH_v2_update.txt]
 ```
 
 **Protocol-2 Test**
 ```
-
+CUDA_VISIBLE_DEVICES=4 python SO_xception.py --seed 0 --name SO_Xcp --output ./output/train/protocol-2/ \
+--gpu 0 --task binary --weight autol --autol_lr 1e-3 --autol_init 1.0 \
+--epochs 36 \
+--num_out 12 --BATCH_SIZE 32 --NUM_WORKERS 8 --mode_label all_local --is_SLH \
+--aug --aug_probs 0.3 \
+--optim adam --scheduler step --lr 1e-4 \
+--txt_path_train [path file for training, e.g., /data/[e.g., age/train_SLH_v2_update.txt]] \
+--txt_path_val [path file for val, e.g., /data/[age/val_SLH_v2_update.txt]]
 ```
 
 ### 4. Inference on the test sets
